@@ -1,6 +1,16 @@
 {
-  "extends": ["tslint:latest", "tslint-react"],
+  "rulesDirectory": [
+    "node_modules/tslint-react/rules"
+  ],
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
   "rules": {
-    "jsx-no-lambda": true
-  }
+    "jsx-no-lambda": true,
+    "jsx-self-close": true
+  },
+  "exclude": [
+    "**/typings/**/*.ts"
+  ]
 }

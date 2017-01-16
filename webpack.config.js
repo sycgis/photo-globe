@@ -1,39 +1,57 @@
+const path = require('path');
+const webpack = require("webpack");
+
 module.exports = {
-  devtool: "eval-source-map",
-  entry: __dirname + "/src/index.ts",
+  devtool: "source-map",
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-hot-middleware/client',
+    './src/index.tsx'
+  ],
   resolve: {
-    extensions: ["", ".ts", ".tsx", ".js", ".jsx"]
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
+    mainFields: ['browser', 'main']
   },
   output: {
-    path: __dirname + "/dist/",
-    filename: "[name].js",
-    publicPath: "/"
+    path: path.resolve(__dirname, "./dist/"),
+    filename: "bundle.js",
+    publicPath: "/static/"
   },
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        loader: "tslint-loader",
-        query: ""
+        use: "tslint-loader",
+        enforce: "pre"
       },
       {
         test: /\.js$/,
-        loader: "source-map-loader"
-      }
-    ],
-    loaders: [
+        use: "source-map-loader",
+        enforce: "pre"
+      },
       {
         test: /\.tsx?$/,
-        loader: "awesome-typescript-loader"
+        use: ["babel-loader", "awesome-typescript-loader"]
       }
     ]
   },
-  tslint: {
-    configuration: require("./tslint.json")
-  },
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM"
-  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        tslint: {
+          configuration: require("./tslint.json")
+        }
+      }
+    })
+  ],
+  // externals: {
+  //   "react": "React",
+  //   "react-dom": "ReactDOM"
+  // },
+  stats: {
+    errorDetails: true
+  }
 };
