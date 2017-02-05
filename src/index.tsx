@@ -4,9 +4,10 @@ import { AppContainer } from 'react-hot-loader';
 import { Router, Route, browserHistory } from "react-router";
 import { Provider } from "react-redux";
 import { syncHistoryWithStore } from "react-router-redux";
-import App from "./containers/App";
 import { createStore } from "redux";
 import reducers from "./reducers";
+import App from "./containers/App";
+import Post from "./containers/Post";
 
 declare const window;
 declare const module;
@@ -28,7 +29,9 @@ function render() {
     <AppContainer>
       <Provider store={store}>
         <Router history={history} key={Math.random()}>
-          <Route path="/" component={App}/>
+          <Route path="/" component={App}>
+            <Route path="post" component={Post}/>
+          </Route>
         </Router>
       </Provider>
     </AppContainer>,

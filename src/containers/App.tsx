@@ -1,9 +1,17 @@
 import * as React from "react";
+import {connect} from 'react-redux';
+import Globe from '../components/Globe';
 
-const App = () => (
+const App = (props) => (
   <div>
-    <h1>Got hot-reloader working! Finally!</h1>
+    <h1>Hey look! A pretty sphere.</h1>
+    {props.children}
+    <Globe {...props.globe}/>
   </div>
 );
 
-export default App;
+const mapStateToProps = (state) => ({
+  globe: state.globe,
+});
+
+export default connect(mapStateToProps)(App);

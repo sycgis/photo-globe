@@ -7,7 +7,6 @@
     "tslint-react"
   ],
   "rules": {
-    "jsx-no-lambda": true,
     "jsx-self-close": true
   },
   "exclude": [
