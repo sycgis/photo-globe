@@ -23,6 +23,7 @@
     "@types/react-dom": "^0.14.20",
     "@types/react-router": "^2.0.44",
     "@types/react-router-redux": "^4.0.38",
+    "@types/three": "^0.83.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
