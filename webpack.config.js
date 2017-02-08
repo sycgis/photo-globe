@@ -9,8 +9,8 @@ module.exports = {
     './src/index.tsx'
   ],
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx"],
-    mainFields: ['browser', 'main']
+    extensions: [ ".ts", ".tsx", ".js", ".jsx" ],
+    mainFields: [ 'browser', 'main' ]
   },
   output: {
     path: path.resolve(__dirname, "./dist/"),
@@ -32,7 +32,11 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: ["babel-loader", "awesome-typescript-loader"]
+        use: [ "babel-loader", "awesome-typescript-loader" ]
+      },
+      {
+        test: /\.scss$/,
+        use: [ "style-loader", "css-loader", "sass-loader" ]
       }
     ]
   },

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { GlobeState } from "../reducers/globe";
 
 interface GlobeProps extends GlobeState {
-  setGlobeRotation: Function;
+  setLocation: Function;
 }
 
 const {Component} = React;
@@ -21,11 +21,13 @@ class Globe extends Component<GlobeProps,undefined> {
   private cloudsMesh;
   private camera;
   private rotation: {x: number, y: number};
+  private size: {width: number, height: number};
 
   constructor(props) {
     super(props);
 
     this.rotation = {x: 0, y: 0};
+    this.size = {width: 1, height: 1};
 
     this.scene = new THREE.Scene();
     this.group = new THREE.Group();
@@ -54,6 +56,19 @@ class Globe extends Component<GlobeProps,undefined> {
     this.cloudsMesh.rotation.y = this.rotation.y;
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  private resize() {
+    const width = this.container.offsetWidth;
+    const height = width;
+
+    this.earth.radius = width / 2;
+    this.clouds.radius = (width / 2) * 1.05;
+
+    this.renderer.setSize(width, height);
+    this.camera.aspect = width / height;
+
+    this.size = {width, height};
   }
 
   private loadTexture() {
@@ -111,22 +126,13 @@ class Globe extends Component<GlobeProps,undefined> {
   }
 
   componentDidMount() {
-    const container = this.container;
-    const width = container.offsetWidth;
-    const height = container.offsetHeight;
-
-    this.renderer.setSize(width, height);
-
-    this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 2000);
+    this.camera = new THREE.PerspectiveCamera(60, this.size.width / this.size.height, 1, 2000);
     this.camera.position.z = 1000;
 
-    container.appendChild(this.renderer.domElement);
+    this.container.appendChild(this.renderer.domElement);
 
     setInterval(() => {
-      const x = this.props.rotation.x;
-      const y = this.props.rotation.y + 0.001;
-
-      this.props.setGlobeRotation(x, y)
+      this.rotation.y = this.rotation.y + 0.001;
     }, 10);
 
     Promise.all([
@@ -137,11 +143,13 @@ class Globe extends Component<GlobeProps,undefined> {
     ]).then(this.letThereBeLight.bind(this));
 
     this.animate();
+    this.resize();
+
+    window.addEventListener("resize", this.resize.bind(this));
   }
 
   componentWillReceiveProps(newProps: GlobeProps) {
-    this.rotation.x = newProps.rotation.x;
-    this.rotation.y = newProps.rotation.y;
+    // Placeholder
   }
 
   // We don't want to do a full re-render on this component, just rotate the globe.
@@ -150,9 +158,7 @@ class Globe extends Component<GlobeProps,undefined> {
   render() {
     console.log("If you're seeing this multiple times, it's broken.");
     return (
-      <div>
-        <div style={{height: '500px', width: '500px'}} ref={(ref) => this.container = ref }/>
-      </div>
+      <div className="three-js-mount" ref={(ref) => this.container = ref }/>
     )
   }
 }

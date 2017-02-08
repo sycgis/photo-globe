@@ -1,13 +1,14 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import { Router, Route, browserHistory } from "react-router";
+import { Redirect, Router, Route, browserHistory } from "react-router";
 import { Provider } from "react-redux";
 import { syncHistoryWithStore } from "react-router-redux";
 import { createStore } from "redux";
 import reducers from "./reducers";
 import App from "./containers/App";
 import Post from "./containers/Post";
+import Posts from "./containers/Posts";
 
 declare const window;
 declare const module;
@@ -30,7 +31,9 @@ function render() {
       <Provider store={store}>
         <Router history={history} key={Math.random()}>
           <Route path="/" component={App}>
-            <Route path="post" component={Post}/>
+            <Route path="post/:post-id" component={Post}/>
+            <Route path="posts" component={Posts}/>
+            <Redirect from="/" to="posts" />
           </Route>
         </Router>
       </Provider>

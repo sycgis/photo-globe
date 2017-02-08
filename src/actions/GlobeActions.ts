@@ -5,12 +5,6 @@ export const setLocation = (latitude: number, longitude: number): GlobeAction =>
   payload: {latitude, longitude},
 });
 
-export const setRotation = (x: number, y: number): GlobeAction => ({
-  type: GlobeTypes.SET_ROTATION,
-  payload: {x, y},
-});
-
 export default {
   setLocation,
-  setRotation,
 }
