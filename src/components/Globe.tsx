@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as THREE from 'three';
-import { GlobeState } from "../reducers/globe";
+import {GlobeState} from "../reducers/globe";
 
 interface GlobeProps extends GlobeState {
   setLocation: Function;
@@ -22,6 +22,9 @@ class Globe extends Component<GlobeProps,undefined> {
   private camera;
   private rotation: {x: number, y: number};
   private size: {width: number, height: number};
+
+  // Point of interest
+  private location: {latitude: number, longitude: number};
 
   constructor(props) {
     super(props);
@@ -140,23 +143,27 @@ class Globe extends Component<GlobeProps,undefined> {
       this.loadBumpMap(),
       this.loadSpecMap(),
       this.loadCloudMap(),
-    ]).then(this.letThereBeLight.bind(this));
+    ]).then(this.letThereBeLight.bind(this))
+      .then(() => setTimeout(() => {
+        const classes = this.container.className;
+        this.container.className = `${classes} mounted`;
+      }, 100));
 
     this.animate();
-    this.resize();
+    setTimeout(() => this.resize(), 1); // This timing hack seems to be the only way to get it to run correctly.
 
+    // The globe needs to be 'responsive'
     window.addEventListener("resize", this.resize.bind(this));
   }
 
   componentWillReceiveProps(newProps: GlobeProps) {
-    // Placeholder
+    this.location = newProps.location;
   }
 
   // We don't want to do a full re-render on this component, just rotate the globe.
   shouldComponentUpdate = () => false;
 
   render() {
-    console.log("If you're seeing this multiple times, it's broken.");
     return (
       <div className="three-js-mount" ref={(ref) => this.container = ref }/>
     )
